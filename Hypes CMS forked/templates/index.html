@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container animate__animated animate__fadeIn">
+    
+    <!-- --- HERO BANNER --- -->
+    <div class="hero-banner p-5 mb-5 shadow-sm text-center text-lg-start">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold text-primary mb-3">Welcome to Blognexa</h1>
+                <p class="lead text-secondary mb-4">Discover insightful articles, tutorials, and stories curated by experts across various categories. A fully dynamic college showcase web app.</p>
+                {% if not current_user.is_authenticated %}
+                    <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3">
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-premium px-4 py-2">Get Started <i class="bi bi-arrow-right-short ms-1"></i></a>
+                        <a href="{{ url_for('main.about') }}" class="btn btn-premium-outline px-4 py-2">Learn More</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4 d-none d-lg-block text-center">
+                <i class="bi bi-rocket-takeoff text-indigo" style="font-size: 8rem; opacity: 0.85;"></i>
+            </div>
+        </div>
+    </div>
+    
+    <!-- --- BLOG POSTS SECTION --- -->
+    <div class="row gy-4">
+        <!-- Main Blog Feed -->
+        <div class="col-lg-8">
+            <h2 class="mb-4 fw-bold text-primary d-flex align-items-center">
+                <i class="bi bi-journal-richtext me-2 text-indigo"></i>Latest Articles
+            </h2>
+            
+            {% if posts %}
+                <div class="row g-4">
+                    {% for post in posts %}
+                        <div class="col-12 col-md-6 mb-2">
+                            <div class="card-premium h-100 post-card overflow-hidden">
+                                <div class="post-card-img-wrapper">
+                                    {% if post.image_file %}
+                                        <img src="{{ url_for('static', filename='uploads/posts/' + post.image_file) }}" alt="{{ post.title }}" class="post-card-img">
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename='uploads/posts/default_post.jpg') }}" alt="{{ post.title }}" class="post-card-img">
+                                    {% endif %}
+                                    
+                                    {% if post.category %}
+                                        <a href="{{ url_for('main.category_posts', slug=post.category.slug) }}" class="post-category-badge text-decoration-none">
+                                            {{ post.category.name }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body d-flex flex-column p-4">
+                                    <div class="d-flex align-items-center gap-2 mb-2 text-muted small">
+                                        <i class="bi bi-calendar3"></i> <span>{{ post.created_at.strftime('%b %d, %Y') }}</span>
+                                        <span class="mx-1">&bull;</span>
+                                        <i class="bi bi-person"></i> <span>{{ post.author.username }}</span>
+                                    </div>
+                                    <h4 class="card-title fw-bold text-primary mb-3">
+                                        <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-decoration-none text-primary">{{ post.title }}</a>
+                                    </h4>
+                                    <!-- Excerpt from content (safe string manipulation, stripping html tags) -->
+                                    <p class="card-text text-secondary mb-4 flex-grow-1">
+                                        {{ post.content|striptags|truncate(120) }}
+                                    </p>
+                                    <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="btn btn-premium-outline mt-auto w-100 py-2">
+                                        Read Article <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- --- PAGINATION --- -->
+                {% if pagination.pages > 1 %}
+                    <nav aria-label="Blog pagination" class="mt-5 animate__animated animate__fadeIn">
+                        <ul class="pagination pagination-premium justify-content-center">
+                            <!-- Previous Link -->
+                            <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                                <a class="page-link" href="{% if pagination.has_prev %}{{ url_for('main.home', page=pagination.prev_num) }}{% else %}#{% endif %}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            
+                            <!-- Pages Numbers -->
+                            {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                                {% if page_num %}
+                                    <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                                        <a class="page-link" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <!-- Next Link -->
+                            <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                                <a class="page-link" href="{% if pagination.has_next %}{{ url_for('main.home', page=pagination.next_num) }}{% else %}#{% endif %}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                {% endif %}
+                
+            {% else %}
+                <div class="card-premium p-5 text-center my-4">
+                    <i class="bi bi-journal-x text-muted display-1 mb-3"></i>
+                    <h3 class="fw-bold text-primary">No Articles Found</h3>
+                    <p class="text-secondary">It seems no posts have been published yet. Please check back later!</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar Widgets -->
+        <div class="col-lg-4">
+            <!-- Quick Actions for Logged In Users -->
+            {% if current_user.is_authenticated %}
+                <div class="card-premium p-4 mb-4 shadow-sm animate__animated animate__fadeIn">
+                    <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-3 d-flex align-items-center">
+                        <i class="bi bi-lightning-charge me-2 text-indigo"></i>Quick Actions
+                    </h4>
+                    <div class="d-flex flex-column gap-2 pt-2">
+                        <a href="{{ url_for('main.write_post') }}" class="btn btn-premium w-100 py-2.5">
+                            <i class="bi bi-pencil-square me-1"></i>Write a Blog Post
+                        </a>
+                        <a href="{{ url_for('main.my_posts') }}" class="btn btn-premium-outline w-100 py-2.5">
+                            <i class="bi bi-file-earmark-text me-1"></i>My Blog Posts
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+            <!-- Categories Widget -->
+            <div class="card-premium p-4 mb-4 shadow-sm">
+                <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-3 d-flex align-items-center">
+                    <i class="bi bi-tags me-2 text-indigo"></i>Categories
+                </h4>
+                {% if categories %}
+                    <div class="d-flex flex-wrap gap-2 pt-2">
+                        {% for cat in categories %}
+                            <a href="{{ url_for('main.category_posts', slug=cat.slug) }}" class="btn btn-premium-outline rounded-pill btn-sm py-2 px-3 fw-medium">
+                                {{ cat.name }} <span class="badge bg-secondary ms-1 rounded-circle">{{ cat.posts.filter_by(status='published').count() }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No categories created yet.</p>
+                {% endif %}
+            </div>
+            
+            <!-- About college project widget -->
+            <div class="card-premium p-4 shadow-sm">
+                <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-3 d-flex align-items-center">
+                    <i class="bi bi-mortarboard me-2 text-indigo"></i>College Project
+                </h4>
+                <p class="text-secondary small mb-3">This project is built using <strong>Python Flask</strong>, <strong>SQLite</strong>, <strong>Jinja2 Templates</strong>, and <strong>Bootstrap 5</strong> as a secure model application for college final year presentation.</p>
+                <a href="{{ url_for('main.about') }}" class="btn btn-premium w-100 py-2">Read Project Abstract</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

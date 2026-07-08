@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+ <!-- Featured Image -->
+<div class="rounded-4 overflow-hidden mb-4 shadow-sm bg-image hero-bg blog" style="background-image: url('{% if post.image_file %}{{ url_for('static', _external=True, filename='uploads/posts/' + post.image_file)}}{% else %}{{ url_for('static', _external=True, filename='uploads/posts/default_post.jpg')}}{% endif %}') !important;">
+</div>
+
+<div class="container animate__animated animate__fadeIn">
+    <div class="row gy-4 justify-content-center">
+        
+        <!-- Main Article Column -->
+        <div class="col-lg-8">
+            <article class="card-premium p-4 p-md-5 mb-5 shadow-sm">
+                <!-- Meta information header -->
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                    <div class="d-flex align-items-center gap-2">
+                        {% if post.category %}
+                            <a href="{{ url_for('main.category_posts', slug=post.category.slug) }}" class="btn btn-premium-outline rounded-pill btn-sm px-3 py-2 fw-semibold">
+                                {{ post.category.name }}
+                            </a>
+                        {% endif %}
+                        {% if current_user.is_authenticated and (current_user == post.author or current_user.is_admin) %}
+                            <a href="{{ url_for('main.edit_post', post_id=post.id) }}" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-2 fw-semibold" style="font-size: 0.8rem;">
+                                <i class="bi bi-pencil-square me-1"></i>Edit Article
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex align-items-center gap-2 text-muted small">
+                        <i class="bi bi-calendar3"></i> <span>Published: {{ post.created_at.strftime('%B %d, %Y') }}</span>
+                    </div>
+                </div>
+                
+                <h1 class="display-5 fw-bold text-primary mb-4">{{ post.title }}</h1>
+                
+                <!-- Author Details -->
+                <div class="d-flex align-items-center border-bottom border-color pb-4 mb-4 gap-3">
+                    {% if post.author.profile_pic == 'default.png' %}
+                        <img src="{{ url_for('static', filename='uploads/profiles/default.png') }}" alt="{{ post.author.username }}" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover; border: 2px solid var(--accent-primary);">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='uploads/profiles/' + post.author.profile_pic) }}" alt="{{ post.author.username }}" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover; border: 2px solid var(--accent-primary);">
+                    {% endif %}
+                    <div>
+                        <h6 class="mb-0 fw-bold text-primary">{{ post.author.username }}</h6>
+                        <small class="text-muted text-uppercase fw-semibold" style="font-size: 0.7rem;">Author</small>
+                    </div>
+                </div>
+                
+               
+                
+                <!-- Main Body Content -->
+                <div class="article-content text-secondary lh-lg fs-6" style="white-space: pre-wrap;">
+                    {{ post.content|safe }}
+                </div>
+            </article>
+            
+            <!-- --- COMMENTS SECTION --- -->
+            <div class="card-premium p-4 p-md-5 mb-4 shadow-sm">
+                <h3 class="fw-bold text-primary border-bottom border-color pb-3 mb-4 d-flex align-items-center justify-content-between">
+                    <span><i class="bi bi-chat-left-dots-fill me-2 text-indigo"></i>Comments</span>
+                    <span class="badge bg-indigo rounded-pill fs-6 py-2 px-3" id="comment-count-badge">{{ comments|length }}</span>
+                </h3>
+                
+                <!-- Write Comment Form -->
+                <div class="mb-5">
+                    {% if current_user.is_authenticated %}
+                        <div class="d-flex align-items-start gap-3">
+                            {% if current_user.profile_pic == 'default.png' %}
+                                <img src="{{ url_for('static', filename='uploads/profiles/default.png') }}" alt="{{ current_user.username }}" class="rounded-circle d-none d-sm-block" style="width: 45px; height: 45px; object-fit: cover; border: 2px solid var(--accent-primary);">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='uploads/profiles/' + current_user.profile_pic) }}" alt="{{ current_user.username }}" class="rounded-circle d-none d-sm-block" style="width: 45px; height: 45px; object-fit: cover; border: 2px solid var(--accent-primary);">
+                            {% endif %}
+                            <div class="w-100">
+                                <form id="comment-form" action="{{ url_for('main.add_comment', slug=post.slug) }}" method="POST">
+                                    <div class="mb-3">
+                                        <textarea class="form-control form-control-premium" rows="3" placeholder="Share your thoughts about this article..." required></textarea>
+                                    </div>
+                                    <button class="btn btn-premium px-4 py-2" type="submit">Submit Comment</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info border border-info p-3" style="border-radius: 12px;">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            Want to share your thoughts? 
+                            <a href="{{ url_for('auth.login', next=request.path) }}" class="fw-semibold text-indigo text-decoration-none">Log in to your account</a> to write a comment.
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Comments list -->
+                <div id="comments-list">
+                    {% if comments %}
+                        {% for comment in comments %}
+                            <div class="comment-box" id="comment-{{ comment.id }}">
+                                <div class="d-flex align-items-start">
+                                    {% if comment.author.profile_pic == 'default.png' %}
+                                        <img src="{{ url_for('static', filename='uploads/profiles/default.png') }}" alt="{{ comment.author.username }}" class="comment-avatar me-3">
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename='uploads/profiles/' + comment.author.profile_pic) }}" alt="{{ comment.author.username }}" class="comment-avatar me-3">
+                                    {% endif %}
+                                    <div class="w-100">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <h6 class="mb-0 fw-semibold text-primary">{{ comment.author.username }}</h6>
+                                            <small class="text-muted">{{ comment.created_at.strftime('%b %d, %Y at %I:%M %p') }}</small>
+                                        </div>
+                                        <p class="mb-0 text-secondary" style="white-space: pre-wrap;">{{ comment.content }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4 my-2 text-muted" id="no-comments-alert">
+                            <i class="bi bi-chat-text display-4 mb-2 d-inline-block"></i>
+                            <p class="mb-0">No comments posted yet. Be the first to share your thoughts!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar Filter Column -->
+        <div class="col-lg-4">
+            <!-- Back to articles -->
+            <a href="{{ url_for('main.home') }}" class="btn btn-premium-outline w-100 py-3 mb-4">
+                <i class="bi bi-arrow-left me-2"></i>Back to Blog Feed
+            </a>
+            
+            <!-- Other categories -->
+            <div class="card-premium p-4 mb-4 shadow-sm">
+                <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-3 d-flex align-items-center">
+                    <i class="bi bi-tags me-2 text-indigo"></i>Categories
+                </h4>
+                {% if categories %}
+                    <div class="d-flex flex-wrap gap-2 pt-2">
+                        {% for cat in categories %}
+                            <a href="{{ url_for('main.category_posts', slug=cat.slug) }}" class="btn btn-premium-outline rounded-pill btn-sm py-2 px-3 fw-medium">
+                                {{ cat.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No categories created yet.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

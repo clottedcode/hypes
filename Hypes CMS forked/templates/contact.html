@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container animate__animated animate__fadeIn">
+    <!-- Header banner -->
+    <div class="hero-banner p-5 mb-5 text-center shadow-sm">
+        <h1 class="display-4 fw-bold text-primary mb-3">Contact Us</h1>
+        <p class="lead text-secondary max-width-600 mx-auto">Have questions, feedback, or suggestions? Drop us a message and we'll get back to you shortly.</p>
+    </div>
+    
+    <div class="row gy-4 my-3 justify-content-center">
+        <!-- Contact Form Column -->
+        <div class="col-md-7">
+            <div class="card-premium p-4 p-md-5 shadow-sm">
+                <h3 class="fw-bold text-primary mb-4 border-bottom border-color pb-3 d-flex align-items-center">
+                    <i class="bi bi-envelope-at me-2 text-indigo"></i>Send a Message
+                </h3>
+                
+                <form method="POST" action="">
+                    <!-- Name Field -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label-premium">Your Name</label>
+                        <input type="text" class="form-control form-control-premium" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    
+                    <!-- Email Field -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label-premium">Email Address</label>
+                        <input type="email" class="form-control form-control-premium" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                    
+                    <!-- Subject Field -->
+                    <div class="mb-3">
+                        <label for="subject" class="form-label-premium">Subject</label>
+                        <input type="text" class="form-control form-control-premium" id="subject" name="subject" placeholder="General Inquiry / Feedback" required>
+                    </div>
+                    
+                    <!-- Message Field -->
+                    <div class="mb-4">
+                        <label for="message" class="form-label-premium">Message</label>
+                        <textarea class="form-control form-control-premium" id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-premium px-5 py-3">
+                        Send Message <i class="bi bi-send ms-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Info Column -->
+        <div class="col-md-5">
+            <div class="card-premium p-4 shadow-sm mb-4 h-100 d-flex flex-column justify-content-center">
+                <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-4 d-flex align-items-center">
+                    <i class="bi bi-info-circle me-2 text-indigo"></i>Contact Info
+                </h4>
+                
+                <div class="d-flex align-items-start mb-4 gap-3">
+                    <div class="p-3 bg-accent rounded-3 text-indigo border border-color">
+                        <i class="bi bi-geo-alt fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold text-primary mb-1">Campus Location</h6>
+                        <p class="text-muted mb-0 small">University Campus Block B, Computer Science Department</p>
+                    </div>
+                </div>
+                
+                <div class="d-flex align-items-start mb-4 gap-3">
+                    <div class="p-3 bg-accent rounded-3 text-indigo border border-color">
+                        <i class="bi bi-envelope fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold text-primary mb-1">Academic Email</h6>
+                        <p class="text-muted mb-0 small">support@blognexa.edu</p>
+                    </div>
+                </div>
+                
+                <div class="d-flex align-items-start gap-3">
+                    <div class="p-3 bg-accent rounded-3 text-indigo border border-color">
+                        <i class="bi bi-clock fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold text-primary mb-1">Consultation Hours</h6>
+                        <p class="text-muted mb-0 small">Monday - Friday: 9:00 AM to 5:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

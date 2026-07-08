@@ -1,0 +1,77 @@
+{% extends 'dashboard/base.html' %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold text-primary mb-1">Manage Categories</h2>
+        <p class="text-muted mb-0">Organize articles and topics by defining dynamic categories</p>
+    </div>
+    <div>
+        <a href="{{ url_for('admin.create_category') }}" class="btn btn-premium py-2 px-4">
+            <i class="bi bi-tag-fill me-2"></i>Create New Category
+        </a>
+    </div>
+</div>
+
+<!-- --- CATEGORIES CRUD TABLE --- -->
+<div class="card-premium p-4 shadow-sm animate__animated animate__fadeIn">
+    {% if categories %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr class="text-muted small">
+                        <th>Category Name</th>
+                        <th>Slug (SEO Friendly URL)</th>
+                        <th>Description</th>
+                        <th>Linked Posts</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                        <tr>
+                            <td>
+                                <strong class="text-primary">{{ category.name }}</strong>
+                            </td>
+                            <td>
+                                <code class="text-indigo">{{ category.slug }}</code>
+                            </td>
+                            <td>
+                                <small class="text-secondary d-block text-truncate" style="max-width: 250px;">
+                                    {{ category.description if category.description else 'No description provided.' }}
+                                </small>
+                            </td>
+                            <td>
+                                <span class="badge bg-indigo-subtle text-indigo px-3 py-2 rounded-pill fw-semibold">
+                                    {{ category.posts.count() }}
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <!-- Edit Link -->
+                                    <a href="{{ url_for('admin.edit_category', category_id=category.id) }}" class="btn btn-premium-outline btn-sm py-1 px-2" title="Edit Category">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <!-- Secured Delete Form -->
+                                    <form action="{{ url_for('admin.delete_category', category_id=category.id) }}" method="POST" onsubmit="return confirm('Warning: Deleting this category will dissociate all posts assigned under it. Are you sure you want to proceed?');">
+                                        <button class="btn btn-outline-danger btn-sm py-1 px-2" type="submit" title="Delete Category">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-tags display-3 text-muted mb-3 d-inline-block"></i>
+            <h4 class="fw-bold text-primary">No Categories Created Yet</h4>
+            <p class="text-secondary mb-4">Define a topic index first before writing any article posts.</p>
+            <a href="{{ url_for('admin.create_category') }}" class="btn btn-premium px-4 py-2">Create First Category</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

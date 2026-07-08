@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container animate__animated animate__fadeIn">
+    
+    <div class="row gy-4">
+        <!-- Main Blog Feed -->
+        <div class="col-lg-8">
+            <div class="mb-4">
+                <a href="{{ url_for('main.home') }}" class="text-indigo text-decoration-none fw-semibold small mb-2 d-inline-block">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Home
+                </a>
+                <h2 class="fw-bold text-primary d-flex align-items-center">
+                    <i class="bi bi-search me-2 text-indigo"></i>Search Results
+                </h2>
+                <p class="text-muted">Showing results for: <strong class="text-indigo">"{{ query }}"</strong></p>
+            </div>
+            
+            {% if posts %}
+                <div class="row g-4">
+                    {% for post in posts %}
+                        <div class="col-12 col-md-6 mb-2">
+                            <div class="card-premium h-100 post-card overflow-hidden">
+                                <div class="post-card-img-wrapper">
+                                    {% if post.image_file %}
+                                        <img src="{{ url_for('static', filename='uploads/posts/' + post.image_file) }}" alt="{{ post.title }}" class="post-card-img">
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename='uploads/posts/default_post.jpg') }}" alt="{{ post.title }}" class="post-card-img">
+                                    {% endif %}
+                                    
+                                    {% if post.category %}
+                                        <a href="{{ url_for('main.category_posts', slug=post.category.slug) }}" class="post-category-badge text-decoration-none">
+                                            {{ post.category.name }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body d-flex flex-column p-4">
+                                    <div class="d-flex align-items-center gap-2 mb-2 text-muted small">
+                                        <i class="bi bi-calendar3"></i> <span>{{ post.created_at.strftime('%b %d, %Y') }}</span>
+                                        <span class="mx-1">&bull;</span>
+                                        <i class="bi bi-person"></i> <span>{{ post.author.username }}</span>
+                                    </div>
+                                    <h4 class="card-title fw-bold text-primary mb-3">
+                                        <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-decoration-none text-primary">{{ post.title }}</a>
+                                    </h4>
+                                    <p class="card-text text-secondary mb-4 flex-grow-1">
+                                        {{ post.content|striptags|truncate(120) }}
+                                    </p>
+                                    <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="btn btn-premium-outline mt-auto w-100 py-2">
+                                        Read Article <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- --- PAGINATION --- -->
+                {% if pagination.pages > 1 %}
+                    <nav aria-label="Search pagination" class="mt-5">
+                        <ul class="pagination pagination-premium justify-content-center">
+                            <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                                <a class="page-link" href="{% if pagination.has_prev %}{{ url_for('main.search', q=query, page=pagination.prev_num) }}{% else %}#{% endif %}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            
+                            {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                                {% if page_num %}
+                                    <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                                        <a class="page-link" href="{{ url_for('main.search', q=query, page=page_num) }}">{{ page_num }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                                <a class="page-link" href="{% if pagination.has_next %}{{ url_for('main.search', q=query, page=pagination.next_num) }}{% else %}#{% endif %}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                {% endif %}
+                
+            {% else %}
+                <div class="card-premium p-5 text-center my-4">
+                    <i class="bi bi-search-heart text-muted display-1 mb-3"></i>
+                    <h3 class="fw-bold text-primary">No Matching Results</h3>
+                    <p class="text-secondary">We couldn't find any articles matching your keyword. Please try a different query.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar Widgets -->
+        <div class="col-lg-4">
+            <!-- Categories Widget -->
+            <div class="card-premium p-4 mb-4 shadow-sm">
+                <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-3 d-flex align-items-center">
+                    <i class="bi bi-tags me-2 text-indigo"></i>Categories
+                </h4>
+                {% if categories %}
+                    <div class="d-flex flex-wrap gap-2 pt-2">
+                        {% for cat in categories %}
+                            <a href="{{ url_for('main.category_posts', slug=cat.slug) }}" class="btn btn-premium-outline rounded-pill btn-sm py-2 px-3 fw-medium">
+                                {{ cat.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No categories created yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

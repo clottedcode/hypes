@@ -1,0 +1,55 @@
+{% extends 'dashboard/base.html' %}
+
+{% block dashboard_content %}
+<div class="mb-4">
+    <a href="{{ url_for('admin.list_categories') }}" class="text-indigo text-decoration-none fw-semibold small mb-2 d-inline-block">
+        <i class="bi bi-arrow-left me-1"></i>Back to Categories List
+    </a>
+    <h2 class="fw-bold text-primary mb-1">{{ legend }}</h2>
+    <p class="text-muted mb-0">{% if category %}Modify existing category specifications{% else %}Define a new article category segment{% endif %}</p>
+</div>
+
+<!-- --- CATEGORY CRUD FORM --- -->
+<div class="card-premium p-4 p-md-5 shadow-sm animate__animated animate__fadeIn mb-5 col-md-8 col-lg-6">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        
+        <!-- Name Field -->
+        <div class="mb-4">
+            {{ form.name.label(class="form-label-premium") }}
+            {% if form.name.errors %}
+                {{ form.name(class="form-control form-control-premium is-invalid", placeholder="Technology, Science, Design...") }}
+                <div class="invalid-feedback">
+                    {% for error in form.name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.name(class="form-control form-control-premium", placeholder="Technology, Science, Design...") }}
+            {% endif %}
+        </div>
+        
+        <!-- Description Field -->
+        <div class="mb-4">
+            {{ form.description.label(class="form-label-premium") }}
+            {% if form.description.errors %}
+                {{ form.description(class="form-control form-control-premium is-invalid", rows="4", placeholder="Explain what topics are covered under this category...") }}
+                <div class="invalid-feedback">
+                    {% for error in form.description.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.description(class="form-control form-control-premium", rows="4", placeholder="Explain what topics are covered under this category...") }}
+            {% endif %}
+        </div>
+        
+        <!-- Submit actions -->
+        <div class="d-flex gap-3">
+            {{ form.submit(class="btn btn-premium px-4 py-2.5") }}
+            <a href="{{ url_for('admin.list_categories') }}" class="btn btn-premium-outline px-4 py-2.5">Cancel</a>
+        </div>
+        
+    </form>
+</div>
+{% endblock %}

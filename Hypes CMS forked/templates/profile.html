@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container animate__animated animate__fadeIn">
+    <div class="row gy-4 my-3 justify-content-center">
+        
+        <!-- Account Summary Left Widget -->
+        <div class="col-md-4">
+            <div class="card-premium p-4 text-center shadow-sm h-100 d-flex flex-column justify-content-center align-items-center">
+                <div class="position-relative mb-4">
+                    {% if current_user.profile_pic == 'default.png' %}
+                        <img src="{{ url_for('static', filename='uploads/profiles/default.png') }}" alt="{{ current_user.username }}" class="rounded-circle shadow-sm border border-3 border-indigo" style="width: 140px; height: 140px; object-fit: cover;">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='uploads/profiles/' + current_user.profile_pic) }}" alt="{{ current_user.username }}" class="rounded-circle shadow-sm border border-3 border-indigo" style="width: 140px; height: 140px; object-fit: cover;">
+                    {% endif %}
+                    <span class="position-absolute bottom-0 end-0 badge rounded-pill {% if current_user.is_admin %}bg-indigo{% else %}bg-secondary{% endif %} px-3 py-2 fs-6">
+                        {{ current_user.role|capitalize }}
+                    </span>
+                </div>
+                
+                <h3 class="fw-bold text-primary mb-1">{{ current_user.username }}</h3>
+                <p class="text-muted small mb-4">{{ current_user.email }}</p>
+                
+                <!-- Account Stats -->
+                <div class="w-100 border-top border-color pt-4 mt-2">
+                    <div class="row">
+                        <div class="col-6 border-end border-color">
+                            <h4 class="fw-bold text-indigo mb-0">{{ current_user.posts.count() }}</h4>
+                            <small class="text-muted text-uppercase fw-semibold" style="font-size: 0.7rem;">Articles</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="fw-bold text-indigo mb-0">{{ current_user.comments.count() }}</h4>
+                            <small class="text-muted text-uppercase fw-semibold" style="font-size: 0.7rem;">Comments</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Blog Quick Actions -->
+                <div class="w-100 border-top border-color pt-4 mt-3 d-flex flex-column gap-2">
+                    <a href="{{ url_for('main.write_post') }}" class="btn btn-premium btn-sm w-100 py-2.5">
+                        <i class="bi bi-pencil-square me-1"></i>Write a Blog Post
+                    </a>
+                    <a href="{{ url_for('main.my_posts') }}" class="btn btn-premium-outline btn-sm w-100 py-2.5">
+                        <i class="bi bi-file-earmark-text me-1"></i>Manage My Posts
+                    </a>
+                </div>
+                
+                <p class="text-muted mt-4 mb-0 small">Member since: {{ current_user.created_at.strftime('%B %Y') }}</p>
+            </div>
+        </div>
+        
+        <!-- Profile details update Form -->
+        <div class="col-md-8">
+            <div class="card-premium p-4 p-md-5 shadow-sm h-100">
+                <h3 class="fw-bold text-primary mb-4 border-bottom border-color pb-3 d-flex align-items-center">
+                    <i class="bi bi-person-gear me-2 text-indigo"></i>Profile Settings
+                </h3>
+                
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    
+                    <!-- Username Field -->
+                    <div class="mb-3">
+                        {{ form.username.label(class="form-label-premium") }}
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control form-control-premium is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.username(class="form-control form-control-premium") }}
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Email Field -->
+                    <div class="mb-3">
+                        {{ form.email.label(class="form-label-premium") }}
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control form-control-premium is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="form-control form-control-premium") }}
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Profile Picture Upload Field -->
+                    <div class="mb-4">
+                        {{ form.profile_pic.label(class="form-label-premium") }}
+                        {{ form.profile_pic(class="form-control form-control-premium") }}
+                        {% if form.profile_pic.errors %}
+                            {% for error in form.profile_pic.errors %}
+                                <div class="text-danger small mt-1">
+                                    <span>{{ error }}</span>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <small class="text-muted d-block mt-2">Allowed formats: PNG, JPG, JPEG, GIF, WEBP. Max size: 5MB.</small>
+                    </div>
+                    
+                    <!-- Submit button -->
+                    {{ form.submit(class="btn btn-premium px-5 py-3") }}
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid px-0" style="margin-top: -24px; margin-bottom: -48px;">
+    <div class="dashboard-wrapper">
+        
+        <!-- --- DASHBOARD SIDEBAR --- -->
+        <aside class="dashboard-sidebar">
+            <h4 class="fw-bold text-indigo mb-4 border-bottom border-color pb-3 d-none d-lg-block">
+                <i class="bi bi-speedometer2 me-2"></i>Control Panel
+            </h4>
+            
+            <nav class="sidebar-nav-list flex-column w-100">
+                <a href="{{ url_for('admin.dashboard') }}" class="sidebar-nav-link {% if request.path == '/admin/dashboard' %}active{% endif %}">
+                    <i class="bi bi-graph-up-arrow"></i>Overview
+                </a>
+                <a href="{{ url_for('admin.list_posts') }}" class="sidebar-nav-link {% if request.path == '/admin/posts' or '/admin/post/' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-richtext"></i>Manage Posts
+                </a>
+                <a href="{{ url_for('admin.list_categories') }}" class="sidebar-nav-link {% if request.path == '/admin/categories' or '/admin/category/' in request.path %}active{% endif %}">
+                    <i class="bi bi-tags"></i>Categories
+                </a>
+                <a href="{{ url_for('admin.list_users') }}" class="sidebar-nav-link {% if request.path == '/admin/users' %}active{% endif %}">
+                    <i class="bi bi-people"></i>Registered Users
+                </a>
+            </nav>
+            
+            <!-- Context card -->
+            <div class="card bg-accent border border-color p-3 rounded-4 mt-auto d-none d-lg-block">
+                <h6 class="fw-semibold text-primary mb-1 small"><i class="bi bi-shield-check text-indigo me-1"></i>Secure Admin</h6>
+                <p class="text-muted mb-0" style="font-size: 0.75rem;">Your account is validated under administrative credentials.</p>
+            </div>
+        </aside>
+        
+        <!-- --- DASHBOARD DYNAMIC CONTENT AREA --- -->
+        <div class="dashboard-content">
+            <div class="animate__animated animate__fadeIn">
+                {% block dashboard_content %}{% endblock %}
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

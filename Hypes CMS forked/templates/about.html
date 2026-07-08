@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container animate__animated animate__fadeIn">
+    <!-- Banner Header -->
+    <div class="hero-banner p-5 mb-5 text-center shadow-sm">
+        <h1 class="display-4 fw-bold text-primary mb-3">About The Project</h1>
+        <p class="lead text-secondary max-width-600 mx-auto">An advanced Content Management System (CMS) designed using Python Flask, Jinja2, and SQLAlchemy as a final year model project showcase.</p>
+    </div>
+    
+    <div class="row gy-5 justify-content-center">
+        <!-- Abstract Column -->
+        <div class="col-lg-8">
+            <div class="card-premium p-4 p-md-5 mb-4 shadow-sm">
+                <h3 class="fw-bold text-primary mb-3">Project Abstract</h3>
+                <p class="text-secondary lh-lg mb-4">
+                    The principal objective of this project is to model and implement a production-ready, fully responsive <strong>Content Management System (CMS)</strong> using a classical <strong>Model-View-Controller (MVC)</strong> architecture pattern. The application enables users to view published articles, filter posts based on dynamic category definitions, and engage with content authors through an inline AJAX-driven commenting engine without experiencing full page reloads.
+                </p>
+                <p class="text-secondary lh-lg mb-4">
+                    On the administrative spectrum, the system features a dedicated, secured <strong>Dashboard control center</strong>. Authorized administrators receive real-time analytical metrics mapping global counts (posts, categories, users) and dynamic graphical distributions powered by Chart.js. Full CRUD operations enable admins to add, edit, and delete published/draft articles, assign SEO-friendly URL slugs, and manage global post categories dynamically.
+                </p>
+                
+                <h3 class="fw-bold text-primary mt-5 mb-3">Architecture & Technology Stack</h3>
+                <div class="row g-3">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="p-3 bg-accent rounded-3 text-center border border-color">
+                            <i class="bi bi-code-slash text-indigo fs-3 mb-2 d-inline-block"></i>
+                            <h6 class="fw-bold text-primary mb-1">Flask Backend</h6>
+                            <small class="text-muted">MVC Framework</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="p-3 bg-accent rounded-3 text-center border border-color">
+                            <i class="bi bi-database text-indigo fs-3 mb-2 d-inline-block"></i>
+                            <h6 class="fw-bold text-primary mb-1">SQLAlchemy</h6>
+                            <small class="text-muted">SQLite Database</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="p-3 bg-accent rounded-3 text-center border border-color">
+                            <i class="bi bi-palette text-indigo fs-3 mb-2 d-inline-block"></i>
+                            <h6 class="fw-bold text-primary mb-1">Bootstrap 5</h6>
+                            <small class="text-muted">Mobile Responsive UI</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="p-3 bg-accent rounded-3 text-center border border-color">
+                            <i class="bi bi-filetype-html text-indigo fs-3 mb-2 d-inline-block"></i>
+                            <h6 class="fw-bold text-primary mb-1">Jinja2</h6>
+                            <small class="text-muted">Template Inheritance</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="p-3 bg-accent rounded-3 text-center border border-color">
+                            <i class="bi bi-lightning-charge text-indigo fs-3 mb-2 d-inline-block"></i>
+                            <h6 class="fw-bold text-primary mb-1">AJAX / JS</h6>
+                            <small class="text-muted">Smooth UX updates</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="p-3 bg-accent rounded-3 text-center border border-color">
+                            <i class="bi bi-file-earmark-lock text-indigo fs-3 mb-2 d-inline-block"></i>
+                            <h6 class="fw-bold text-primary mb-1">Flask-WTF</h6>
+                            <small class="text-muted">Form Validations</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar stats Column -->
+        <div class="col-lg-4">
+            <!-- Quick Actions for Logged In Users -->
+            {% if current_user.is_authenticated %}
+                <div class="card-premium p-4 mb-4 shadow-sm animate__animated animate__fadeIn">
+                    <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-3 d-flex align-items-center">
+                        <i class="bi bi-lightning-charge me-2 text-indigo"></i>Quick Actions
+                    </h4>
+                    <div class="d-flex flex-column gap-2 pt-2">
+                        <a href="{{ url_for('main.write_post') }}" class="btn btn-premium w-100 py-2.5">
+                            <i class="bi bi-pencil-square me-1"></i>Write a Blog Post
+                        </a>
+                        <a href="{{ url_for('main.my_posts') }}" class="btn btn-premium-outline w-100 py-2.5">
+                            <i class="bi bi-file-earmark-text me-1"></i>My Blog Posts
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="card-premium p-4 shadow-sm mb-4">
+                <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-3">Key Features</h4>
+                <ul class="list-unstyled text-secondary small">
+                    <li class="mb-3 d-flex align-items-start"><i class="bi bi-patch-check-fill text-indigo me-2"></i><span><strong>Secure Authentication</strong>: Password hashing using PBKDF2/SHA256 and Session tracking via Flask-Login.</span></li>
+                    <li class="mb-3 d-flex align-items-start"><i class="bi bi-patch-check-fill text-indigo me-2"></i><span><strong>Interactive Analytics</strong>: Doughnut graphs plotting posts density using Chart.js.</span></li>
+                    <li class="mb-3 d-flex align-items-start"><i class="bi bi-patch-check-fill text-indigo me-2"></i><span><strong>Media Management</strong>: Image validation uploads for profile pic and articles.</span></li>
+                    <li class="mb-3 d-flex align-items-start"><i class="bi bi-patch-check-fill text-indigo me-2"></i><span><strong>SEO URLs</strong>: Automated string transliterations to construct elegant URL slugs.</span></li>
+                    <li class="mb-3 d-flex align-items-start"><i class="bi bi-patch-check-fill text-indigo me-2"></i><span><strong>Modular UI</strong>: Dual-mode transitions (Dark & Light themes) leveraging native browser local storage persistence.</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

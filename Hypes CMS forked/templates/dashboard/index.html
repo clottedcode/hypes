@@ -1,0 +1,219 @@
+{% extends 'dashboard/base.html' %}
+
+{% block dashboard_content %}
+<!-- Dashboard Header -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold text-primary mb-1">Dashboard Overview</h2>
+        <p class="text-muted mb-0">Real-time statistics and publishing activity overview</p>
+    </div>
+    <div>
+        <a href="{{ url_for('admin.create_post') }}" class="btn btn-premium py-2 px-4">
+            <i class="bi bi-file-earmark-plus me-2"></i>Create New Post
+        </a>
+    </div>
+</div>
+
+<!-- --- ANALYTICS METRICS CARDS --- -->
+<div class="row g-4 mb-5 animate__animated animate__fadeIn">
+    <!-- Total Posts -->
+    <div class="col-6 col-lg-3">
+        <div class="card-premium p-4 shadow-sm analytics-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="text-muted small text-uppercase mb-2">Total Posts</h5>
+                    <h2 class="fw-bold text-primary mb-0">{{ total_posts }}</h2>
+                </div>
+                <div class="analytics-icon"><i class="bi bi-file-earmark-richtext"></i></div>
+            </div>
+            <div class="mt-2 text-secondary small">
+                <span class="text-success fw-bold"><i class="bi bi-globe"></i> {{ published_posts }}</span> published
+            </div>
+        </div>
+    </div>
+    <!-- Categories -->
+    <div class="col-6 col-lg-3">
+        <div class="card-premium p-4 shadow-sm analytics-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="text-muted small text-uppercase mb-2">Categories</h5>
+                    <h2 class="fw-bold text-primary mb-0">{{ total_categories }}</h2>
+                </div>
+                <div class="analytics-icon"><i class="bi bi-tags"></i></div>
+            </div>
+            <div class="mt-2 text-secondary small">
+                Mapped categorizations
+            </div>
+        </div>
+    </div>
+    <!-- Users -->
+    <div class="col-6 col-lg-3">
+        <div class="card-premium p-4 shadow-sm analytics-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="text-muted small text-uppercase mb-2">Total Users</h5>
+                    <h2 class="fw-bold text-primary mb-0">{{ total_users }}</h2>
+                </div>
+                <div class="analytics-icon"><i class="bi bi-people"></i></div>
+            </div>
+            <div class="mt-2 text-secondary small">
+                Registered profiles
+            </div>
+        </div>
+    </div>
+    <!-- Comments -->
+    <div class="col-6 col-lg-3">
+        <div class="card-premium p-4 shadow-sm analytics-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="text-muted small text-uppercase mb-2">Comments</h5>
+                    <h2 class="fw-bold text-primary mb-0">{{ total_comments }}</h2>
+                </div>
+                <div class="analytics-icon"><i class="bi bi-chat-left-dots"></i></div>
+            </div>
+            <div class="mt-2 text-secondary small">
+                Submitted reactions
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- --- CHARTS & BREAKDOWN GRID --- -->
+<div class="row g-4 mb-5">
+    <!-- Category Distribution Chart -->
+    <div class="col-lg-7">
+        <div class="card-premium p-4 shadow-sm h-100">
+            <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-4">
+                <i class="bi bi-pie-chart me-2 text-indigo"></i>Category Post Density
+            </h4>
+            <div style="height: 300px; position: relative;">
+                <canvas id="categoryChart" data-labels='{{ chart_labels|tojson }}' data-values='{{ chart_data|tojson }}'></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Publishing Breakdown Status -->
+    <div class="col-lg-5">
+        <div class="card-premium p-4 shadow-sm h-100">
+            <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-4">
+                <i class="bi bi-sliders me-2 text-indigo"></i>Publishing Status
+            </h4>
+            <div class="d-flex flex-column gap-4 py-2">
+                <div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="fw-medium text-primary">Published Articles</span>
+                        <span class="text-success fw-bold">{{ published_posts }} / {{ total_posts }}</span>
+                    </div>
+                    <div class="progress rounded-pill bg-accent" style="height: 10px;">
+                        {% set pub_percent = (published_posts / total_posts * 100) if total_posts > 0 else 0 %}
+                        <div class="progress-bar bg-success rounded-pill" role="progressbar" style="width: {{ pub_percent }}%" aria-valuenow="{{ pub_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="fw-medium text-primary">Draft / Pending Approval</span>
+                        <span class="text-warning fw-bold">{{ draft_posts }} / {{ total_posts }}</span>
+                    </div>
+                    <div class="progress rounded-pill bg-accent" style="height: 10px;">
+                        {% set draft_percent = (draft_posts / total_posts * 100) if total_posts > 0 else 0 %}
+                        <div class="progress-bar bg-warning rounded-pill" role="progressbar" style="width: {{ draft_percent }}%" aria-valuenow="{{ draft_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                
+                <div class="border-top border-color pt-4 mt-2">
+                    <h6 class="fw-bold text-primary mb-2">Project Credentials</h6>
+                    <p class="text-muted small mb-0">Database type: <strong>SQLite DB</strong><br>OR Mapper: <strong>SQLAlchemy 3.1</strong><br>Host system: <strong>Windows Server Local</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- --- RECENT ACTIVITY TABLES --- -->
+<div class="row g-4">
+    <!-- Recent Posts Table -->
+    <div class="col-xl-7">
+        <div class="card-premium p-4 shadow-sm h-100">
+            <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-3 d-flex align-items-center justify-content-between">
+                <span><i class="bi bi-file-earmark-text me-2 text-indigo"></i>Recently Added Posts</span>
+                <a href="{{ url_for('admin.list_posts') }}" class="btn btn-premium-outline btn-sm py-1 px-3 fs-7">View All</a>
+            </h4>
+            
+            {% if recent_posts %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr class="text-muted small">
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in recent_posts %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="fw-semibold text-primary text-decoration-none d-block text-truncate" style="max-width: 250px;">{{ post.title }}</a>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-accent text-secondary border border-color">{{ post.category.name if post.category else 'Uncategorized' }}</span>
+                                    </td>
+                                    <td><small class="text-muted">{{ post.created_at.strftime('%b %d, %Y') }}</small></td>
+                                    <td>
+                                        <span class="badge rounded-pill {% if post.status == 'published' %}bg-success-subtle text-success{% else %}bg-warning-subtle text-warning{% endif %}">
+                                            {{ post.status|capitalize }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted my-4 text-center">No posts created yet.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Recent Registered Users -->
+    <div class="col-xl-5">
+        <div class="card-premium p-4 shadow-sm h-100">
+            <h4 class="fw-bold text-primary border-bottom border-color pb-3 mb-3 d-flex align-items-center justify-content-between">
+                <span><i class="bi bi-people me-2 text-indigo"></i>Recent Registrations</span>
+                <a href="{{ url_for('admin.list_users') }}" class="btn btn-premium-outline btn-sm py-1 px-3 fs-7">View All</a>
+            </h4>
+            
+            {% if recent_users %}
+                <div class="d-flex flex-column gap-3 pt-2">
+                    {% for user in recent_users %}
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                {% if user.profile_pic == 'default.png' %}
+                                    <img src="{{ url_for('static', filename='uploads/profiles/default.png') }}" alt="{{ user.username }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid var(--accent-primary);">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='uploads/profiles/' + user.profile_pic) }}" alt="{{ user.username }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid var(--accent-primary);">
+                                {% endif %}
+                                <div>
+                                    <h6 class="mb-0 fw-semibold text-primary">{{ user.username }}</h6>
+                                    <small class="text-muted" style="font-size: 0.75rem;">Joined {{ user.created_at.strftime('%b %d, %Y') }}</small>
+                                </div>
+                            </div>
+                            <span class="badge {% if user.is_admin %}bg-indigo-subtle text-indigo{% else %}bg-secondary-subtle text-secondary{% endif %} rounded-pill">
+                                {{ user.role|capitalize }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted my-4 text-center">No users registered yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Include Chart.js CDN for Overview Charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}

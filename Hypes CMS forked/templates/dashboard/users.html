@@ -1,0 +1,68 @@
+{% extends 'dashboard/base.html' %}
+
+{% block dashboard_content %}
+<div class="mb-4">
+    <h2 class="fw-bold text-primary mb-1">Registered Users</h2>
+    <p class="text-muted mb-0">Review profiles</p>
+</div>
+
+<!-- --- USERS LIST TABLE --- -->
+<div class="card-premium p-4 shadow-sm animate__animated animate__fadeIn">
+    {% if users %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr class="text-muted small">
+                        <th>Avatar</th>
+                        <th>Username</th>
+                        <th>Email Address</th>
+                        <th>Joined Date</th>
+                        <th>Articles Count</th>
+                        <th>Comments Count</th>
+                        <th class="text-end">Privilege Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>
+                                {% if user.profile_pic == 'default.png' %}
+                                    <img src="{{ url_for('static', filename='uploads/profiles/default.png') }}" alt="{{ user.username }}" class="rounded-circle shadow-sm border border-2 border-indigo" style="width: 40px; height: 40px; object-fit: cover;">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='uploads/profiles/' + user.profile_pic) }}" alt="{{ user.username }}" class="rounded-circle shadow-sm border border-2 border-indigo" style="width: 40px; height: 40px; object-fit: cover;">
+                                {% endif %}
+                            </td>
+                            <td>
+                                <strong class="text-primary">{{ user.username }}</strong>
+                            </td>
+                            <td>
+                                <span class="text-secondary small">{{ user.email }}</span>
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ user.created_at.strftime('%b %d, %Y') }}</small>
+                            </td>
+                            <td>
+                                <span class="badge bg-indigo-subtle text-indigo px-3 py-1.5 rounded-pill fw-semibold">
+                                    {{ user.posts.count() }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary-subtle text-secondary px-3 py-1.5 rounded-pill fw-semibold">
+                                    {{ user.comments.count() }}
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <span class="badge {% if user.is_admin %}bg-indigo text-white{% else %}bg-secondary-subtle text-secondary{% endif %} rounded-pill py-2 px-3 fw-semibold">
+                                    {{ user.role|upper }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted my-4 text-center">No users registered yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

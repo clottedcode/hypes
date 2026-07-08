@@ -1,0 +1,87 @@
+{% extends 'dashboard/base.html' %}
+
+{% block dashboard_content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold text-primary mb-1">Manage Blog Posts</h2>
+        <p class="text-muted mb-0">Publish, modify, and delete blog articles</p>
+    </div>
+    <div>
+        <a href="{{ url_for('admin.create_post') }}" class="btn btn-premium py-2 px-4">
+            <i class="bi bi-file-earmark-plus me-2"></i>Create New Post
+        </a>
+    </div>
+</div>
+
+<!-- --- POSTS CRUD TABLE --- -->
+<div class="card-premium p-4 shadow-sm animate__animated animate__fadeIn">
+    {% if posts %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr class="text-muted small">
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Author</th>
+                        <th>Created Date</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                        <tr>
+                            <td>
+                                {% if post.image_file %}
+                                    <img src="{{ url_for('static', filename='uploads/posts/' + post.image_file) }}" alt="{{ post.title }}" class="rounded-3" style="width: 50px; height: 35px; object-fit: cover;">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='uploads/posts/default_post.jpg') }}" alt="{{ post.title }}" class="rounded-3" style="width: 50px; height: 35px; object-fit: cover;">
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="fw-semibold text-primary text-decoration-none d-block text-truncate" style="max-width: 200px;" target="_blank">
+                                    {{ post.title }} <i class="bi bi-box-arrow-up-right small ms-1 text-muted" style="font-size: 0.75rem;"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <span class="badge bg-accent text-secondary border border-color">
+                                    {{ post.category.name if post.category else 'Uncategorized' }}
+                                </span>
+                            </td>
+                            <td><small class="fw-medium text-primary">{{ post.author.username }}</small></td>
+                            <td><small class="text-muted">{{ post.created_at.strftime('%b %d, %Y') }}</small></td>
+                            <td>
+                                <span class="badge rounded-pill {% if post.status == 'published' %}bg-success-subtle text-success{% else %}bg-warning-subtle text-warning{% endif %}">
+                                    {{ post.status|capitalize }}
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <!-- Edit Link -->
+                                    <a href="{{ url_for('admin.edit_post', post_id=post.id) }}" class="btn btn-premium-outline btn-sm py-1 px-2" title="Edit Post">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <!-- Secured Delete Form -->
+                                    <form action="{{ url_for('admin.delete_post', post_id=post.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this post? This action is irreversible.');">
+                                        <button class="btn btn-outline-danger btn-sm py-1 px-2" type="submit" title="Delete Post">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-file-earmark-x display-3 text-muted mb-3 d-inline-block"></i>
+            <h4 class="fw-bold text-primary">No Posts Created Yet</h4>
+            <p class="text-secondary mb-4">Start sharing your thoughts with the world by adding your very first article.</p>
+            <a href="{{ url_for('admin.create_post') }}" class="btn btn-premium px-4 py-2">Create First Post</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

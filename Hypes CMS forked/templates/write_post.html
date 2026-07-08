@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<style>
+    .ck-editor__editable {
+        min-height: 350px !important;
+        background-color: var(--bg-secondary) !important;
+        color: var(--text-primary) !important;
+        border-color: var(--border-color) !important;
+    }
+    .ck.ck-toolbar {
+        background-color: var(--bg-accent) !important;
+        border-color: var(--border-color) !important;
+    }
+    .ck.ck-button {
+        color: var(--text-primary) !important;
+    }
+    .ck.ck-button:hover {
+        background-color: var(--border-color) !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container animate__animated animate__fadeIn">
+    <div class="mb-4">
+        <a href="{{ url_for('main.my_posts') }}" class="text-indigo text-decoration-none fw-semibold small mb-2 d-inline-block">
+            <i class="bi bi-arrow-left me-1"></i>Back to My Posts
+        </a>
+        <h2 class="fw-bold text-primary mb-1">{{ legend }}</h2>
+        <p class="text-muted mb-0">{% if post %}Modify your existing blog post{% else %}Draft a new blog post and publish it for everyone to read{% endif %}</p>
+    </div>
+
+    <!-- --- POST FORM --- -->
+    <div class="card-premium p-4 p-md-5 shadow-sm mb-5">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            
+            <div class="row g-4">
+                <!-- Left Side: Core Fields -->
+                <div class="col-lg-8">
+                    <!-- Title Field -->
+                    <div class="mb-4">
+                        {{ form.title.label(class="form-label-premium") }}
+                        {% if form.title.errors %}
+                            {{ form.title(class="form-control form-control-premium is-invalid", placeholder="Enter post title") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.title(class="form-control form-control-premium", placeholder="Enter post title") }}
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Content Field with CKEditor -->
+                    <div class="mb-4">
+                        {{ form.content.label(class="form-label-premium") }}
+                        {% if form.content.errors %}
+                            {{ form.content(class="form-control form-control-premium is-invalid", id="content") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.content.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.content(class="form-control form-control-premium", id="content") }}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Right Side: Settings & Uploads -->
+                <div class="col-lg-4">
+                    <div class="bg-accent p-4 rounded-4 border border-color h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="fw-bold text-primary border-bottom border-color pb-2 mb-3"><i class="bi bi-gear me-2"></i>Publish Settings</h5>
+                            
+                            <!-- Category Field -->
+                            <div class="mb-3">
+                                {{ form.category_id.label(class="form-label-premium") }}
+                                {{ form.category_id(class="form-select form-control-premium") }}
+                                {% if form.category_id.errors %}
+                                    {% for error in form.category_id.errors %}
+                                        <div class="text-danger small mt-1"><span>{{ error }}</span></div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Status Selection -->
+                            <div class="mb-3">
+                                {{ form.status.label(class="form-label-premium") }}
+                                {{ form.status(class="form-select form-control-premium") }}
+                                {% if form.status.errors %}
+                                    {% for error in form.status.errors %}
+                                        <div class="text-danger small mt-1"><span>{{ error }}</span></div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Featured Image Upload -->
+                            <div class="mb-4">
+                                {{ form.image.label(class="form-label-premium") }}
+                                {{ form.image(class="form-control form-control-premium") }}
+                                {% if form.image.errors %}
+                                    {% for error in form.image.errors %}
+                                        <div class="text-danger small mt-1"><span>{{ error }}</span></div>
+                                    {% endfor %}
+                                {% endif %}
+                                
+                                <!-- Preview of current post cover if editing -->
+                                {% if post and post.image_file %}
+                                    <div class="mt-3">
+                                        <small class="text-muted d-block mb-1">Current Cover:</small>
+                                        <img src="{{ url_for('static', filename='uploads/posts/' + post.image_file) }}" alt="Current Cover" class="img-fluid rounded-3 border border-color shadow-sm" style="max-height: 120px; width: 100%; object-fit: cover;">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="mt-4">
+                            {{ form.submit(class="btn btn-premium w-100 py-3 mb-2") }}
+                            <a href="{{ url_for('main.my_posts') }}" class="btn btn-premium-outline w-100 py-2.5">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- CKEditor 5 Classic Build CDN -->
+<script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        ClassicEditor
+            .create(document.querySelector('#content'), {
+                toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo' ]
+            })
+            .catch(error => {
+                console.error('CKEditor Load Error:', error);
+            });
+    });
+</script>
+{% endblock %}

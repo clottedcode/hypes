@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container animate__animated animate__fadeIn">
+    <div class="row justify-content-center my-5">
+        <div class="col-md-6 col-lg-5">
+            <div class="card-premium p-5 shadow-lg">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus text-indigo display-4 mb-2 d-inline-block"></i>
+                    <h2 class="fw-bold text-primary">Create Account</h2>
+                    <p class="text-muted">Join Antigravity CMS to write and share posts</p>
+                </div>
+                
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    
+                    <!-- Username -->
+                    <div class="mb-3">
+                        {{ form.username.label(class="form-label-premium") }}
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control form-control-premium is-invalid", placeholder="Choose username") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.username(class="form-control form-control-premium", placeholder="Choose username") }}
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Email -->
+                    <div class="mb-3">
+                        {{ form.email.label(class="form-label-premium") }}
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control form-control-premium is-invalid", placeholder="your.name@example.com") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="form-control form-control-premium", placeholder="your.name@example.com") }}
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Password -->
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label-premium") }}
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control form-control-premium is-invalid", placeholder="At least 6 characters") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password(class="form-control form-control-premium", placeholder="At least 6 characters") }}
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Confirm Password -->
+                    <div class="mb-4">
+                        {{ form.confirm_password.label(class="form-label-premium") }}
+                        {% if form.confirm_password.errors %}
+                            {{ form.confirm_password(class="form-control form-control-premium is-invalid", placeholder="Repeat password") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.confirm_password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.confirm_password(class="form-control form-control-premium", placeholder="Repeat password") }}
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Submit -->
+                    {{ form.submit(class="btn btn-premium w-100 py-3") }}
+                </form>
+                
+                <hr class="border-color my-4">
+                
+                <div class="text-center">
+                    <p class="text-muted small mb-0">Already have an account? 
+                        <a href="{{ url_for('auth.login') }}" class="text-indigo fw-semibold text-decoration-none">Sign In Here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

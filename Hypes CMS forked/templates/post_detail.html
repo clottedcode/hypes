@@ -10,7 +10,7 @@
     <div class="row gy-4 justify-content-center">
         
         <!-- Main Article Column -->
-        <div class="col-lg-8">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-xs-8">
             <article class="card-premium p-4 p-md-5 mb-5 shadow-sm">
                 <!-- Meta information header -->
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
@@ -53,9 +53,10 @@
                     {{ post.content|safe }}
                 </div>
             </article>
-            
+            <div class="container animate__animated animate__fadeIn">
+    <div class="row gy-4 justify-content-center">
             <!-- --- COMMENTS SECTION --- -->
-            <div class="card-premium p-4 p-md-5 mb-4 shadow-sm">
+            <div class="card-premium col-lg-4 col-md-4 p-4 p-md-5 mb-4 shadow-sm">
                 <h3 class="fw-bold text-primary border-bottom border-color pb-3 mb-4 d-flex align-items-center justify-content-between">
                     <span><i class="bi bi-chat-left-dots-fill me-2 text-indigo"></i>Comments</span>
                     <span class="badge bg-indigo rounded-pill fs-6 py-2 px-3" id="comment-count-badge">{{ comments|length }}</span>
@@ -117,10 +118,9 @@
                     {% endif %}
                 </div>
             </div>
-        </div>
         
         <!-- Sidebar Filter Column -->
-        <div class="col-lg-4">
+        <div class="col-lg-4 col-md-4 sidebar">
             <!-- Back to articles -->
             <a href="{{ url_for('main.home') }}" class="btn btn-premium-outline w-100 py-3 mb-4">
                 <i class="bi bi-arrow-left me-2"></i>Back to Blog Feed
@@ -144,7 +144,9 @@
                 {% endif %}
             </div>
         </div>
-        
+        </div>
+</div>
+</div>
     </div>
 </div>
 {% endblock %}

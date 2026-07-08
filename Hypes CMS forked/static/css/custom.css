@@ -14,13 +14,13 @@
   padding-bottom: 0;
 }
 
-body {
-font-family: Helvetica !important;
-}
-
-.content {
+* {
     margin:0px !important;
     padding:0px !important;
+}
+
+body {
+font-family: Helvetica !important;
 }
 
 main {
@@ -34,17 +34,18 @@ main {
 
 h1 {
   font-family: "Amasis MT Bold" !important;
-  font-size: 40pt !important;
 }
 
-
+.logo {
+  width: 8em; height: auto; 
+  object-fit: cover;
+}
 
 h2 {
   font-size: 30pt !important;
 }
 
 p {
-  font-size: 20pt !important;
   color: #fff !important;
 }
 
@@ -90,26 +91,14 @@ header {
   font-size: 8vh !important;
 }
 
-.flex {
-  display: flex !important;
-  min-height: 15vh !important;
-  align-items:top !important;
-  padding: 0px !important;
+p {
+  font-size: 15pt !important;
+}
+.h1 {
+    font-size: 9pt !important;
 }
 
-.home-knop {
-  display: flex !important;
-  align-items: center !important;
-}
 
-.header-menu {
-  height: 8vh !important;
-  display: flex !important;
-    flex-flow: row wrap;
-    column-count: 3 !important;
-    width: 100% !important;
-    padding: 0px !important;
-}
 
 button.btn {
       cursor: pointer;
@@ -146,12 +135,28 @@ button.btn,input {
   width:10em !important;
 }
 
-@media (min-width: 800px) {
+@media (max-width: 1800px) {
+article {
+  width:99% !important; 
+  padding-left:10em !important;
+}
 
-  
+}
+@media (min-width: 800px) {
+.sidebar {
+  padding-left:2em !important;
+
+}
+  .h1 {
+    font-size: 14pt !important;
+}
 
 .hero-bg h1 {
   font-size: 13vh !important;
+}
+
+p {
+  font-size: 15pt !important;
 }
 
 .flex {

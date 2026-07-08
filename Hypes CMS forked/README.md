@@ -1,44 +1,30 @@
-# Hypes CMS — Python Flask Content Management System
+# Blognexa CMS — Python Flask Content Management System
 
-Hypes CMS is a **forked** professional-grade, fully functional dynamic web application developed as an MVC showcase model. Built using Python Flask, Jinja2, SQLite with SQLAlchemy ORM, and Bootstrap 5, the application is designed to meet final year college project specifications, showcasing state-of-the-art software engineering best practices.
-
-## Add-ons
-
-- Aero Button Style
-
-- Full sized hero images
-
-## Support and help
-
-For support write me at ronanbakker95@gmail.com
+Blognexa CMS is a professional-grade, fully functional dynamic web application developed as an MVC showcase model. Built using Python Flask, Jinja2, SQLite with SQLAlchemy ORM, and Bootstrap 5, the application is designed to meet final year college project specifications, showcasing state-of-the-art software engineering best practices.
 
 ---
 
-## Key Features
+##  Key Features
 
-### Secure User Authentication & Management
-
+###  Secure User Authentication & Management
 * **Role-Based Access Control**: Clean division between general users and administrators.
 * ** Werkzeug Cryptography**: Robust, secure password hashing using PBKDF2 with SHA256.
 * **Session Management**: Persistent sessions and "Remember Me" features via Flask-Login.
 * **Custom Profile Management**: Users can update emails, custom usernames, and upload unique profile images.
 
-### Administrative Dashboard & Analytics
-
+###  Administrative Dashboard & Analytics
 * **Overview Analytics Cards**: Dynamic count grids mapping total posts, comments, categories, and users.
 * **Graphing Integrations**: Premium doughnut charts illustrating posts density across categories dynamically using **Chart.js** via CDN.
 * **Category Post Status Metrics**: Progress bars tracking draft vs. published articles ratio.
 * **Activity Lists**: Quick tables summarizing recent user signups and articles published.
 
-### Full CRUD & Content Controls
-
+###  Full CRUD & Content Controls
 * **Articles Management Table**: Admin overview for managing blog posts.
 * **Dynamic Article Forms**: Form validation mapping WTForms. Includes **CKEditor 5** rich text editor CDN for an elegant posting experience.
 * **Dynamic Categories**: Admin CRUD interface to map and manage categorizations.
 * **SEO-Friendly URL Slugs**: Auto-generating unique, URL-safe post slugs to prevent path collisions.
 
-### Rich User Engagements & UX
-
+###  Rich User Engagements & UX
 * **AJAX Commenting Thread**: Live, dynamic comment submissions and updates without full page reloads, using native Javascript fetch API.
 * **Dynamic Keyword Search**: Filter articles globally across titles and contents.
 * **Dynamic Sidebar Categorizations**: Multi-page sidebar categorization counts mapping published items.
@@ -46,7 +32,7 @@ For support write me at ronanbakker95@gmail.com
 
 ---
 
-## Architecture Design (MVC Structure)
+##  Architecture Design (MVC Structure)
 
 The project cleanly implements the Model-View-Controller pattern:
 
@@ -100,22 +86,18 @@ D:\CMS project/
 
 ---
 
-## Step-by-Step Local Setup
+##  Step-by-Step Local Setup
 
 Follow these straightforward commands in your terminal to initialize and run the project:
 
 ### 1. Clone or Move to Project Folder
-
 Navigate to the directory in your system:
-
 ```bash
 cd "D:\CMS project"
 ```
 
 ### 2. Configure Virtual Environment
-
 It is highly recommended to use a virtual environment to manage dependencies locally:
-
 ```bash
 # Create the environment
 python -m venv venv
@@ -125,39 +107,32 @@ python -m venv venv
 ```
 
 ### 3. Install Required Packages
-
 Install Flask and its extensions using the requirements file:
-
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 4. Run the Application
-
 Start the development server:
-
 ```bash
 python run.py
 ```
-
 * The server will boot locally at: **`http://127.0.0.1:5000`**
 * Upon startup, SQLite database tables are created automatically (`cms.db`).
 
 ---
 
-## Seeded Administrator Credentials
+##  Seeded Administrator Credentials
 
 To facilitate rapid testing, the system automatically detects empty databases and injects default categories along with an administrative account. 
 
 Use the following credentials to access the secured **Admin Dashboard**:
-
 * **Admin Login Email**: `admin@cms.com`
 * **Admin Password**: `admin123`
 
 ---
 
-## Tech Stack Summary
-
+##  Tech Stack Summary
 * **Language**: Python 3
 * **Framework**: Flask 3
 * **Forms Manager**: Flask-WTF & WTForms

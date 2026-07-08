@@ -20,6 +20,7 @@
     <!-- Custom Style Sheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <link rel="favicon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     {% block styles %}{% endblock %}
 </head>
@@ -29,7 +30,7 @@
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top shadow-sm">
         <div class="container">
             <a class="navbar-brand navbar-brand-premium" href="{{ url_for('main.home') }}">
-                <i class="bi bi-rocket-takeoff-fill me-2 text-indigo"></i>Hypes
+                <img src="{{ url_for('static', filename='Hypes.png') }}" alt="{{ current_user.username }}" class="logo">
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,18 +126,18 @@
             <div class="row gy-4">
                 <div class="col-md-6 col-lg-4">
                     <a class="navbar-brand-premium" href="{{ url_for('main.home') }}">
-                        <i class="bi bi-rocket-takeoff-fill me-2"></i>Blognexa
+                        <i class="bi bi-rocket-takeoff-fill me-2"></i>&copy; 2026 Hypes
                     </a>
-                    <p class="text-muted mt-3">A modern, responsive, and robust Content Management System designed for developers and content creators alike.</p>
+                    <p class="text-muted mt-3">A content management system for home use, making your own blog or catalog and keeping up your own database.</p>
                 </div>
                 <div class="col-md-6 col-lg-4">
-                    <h6 class="text-primary fw-bold text-uppercase mb-3">Quick Navigation</h6>
+                    <h6 class="text-primary fw-bold text-uppercase mb-3">Fast Links</h6>
                     <div class="row">
                         <div class="col-6">
                             <ul class="list-unstyled">
                                 <li class="mb-2"><a href="{{ url_for('main.home') }}" class="text-decoration-none text-muted">Home</a></li>
-                                <li class="mb-2"><a href="{{ url_for('main.about') }}" class="text-decoration-none text-muted">About Us</a></li>
-                                <li class="mb-2"><a href="{{ url_for('main.contact') }}" class="text-decoration-none text-muted">Contact Us</a></li>
+                                <li class="mb-2"><a href="{{ url_for('main.about') }}" class="text-decoration-none text-muted">Over</a></li>
+                                <li class="mb-2"><a href="{{ url_for('main.contact') }}" class="text-decoration-none text-muted">Reach out</a></li>
                             </ul>
                         </div>
                         <div class="col-6">
@@ -148,8 +149,8 @@
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <h6 class="text-primary fw-bold text-uppercase mb-3">College Project Credentials</h6>
-                    <p class="text-muted mb-2">Designed as a final year college project showcasing an MVC Python Flask application.</p>
+                    <h6 class="text-primary fw-bold text-uppercase mb-3">Forked from Blogenexa, found on Github</h6>
+                    <p class="text-muted mb-2">Tweaking this app with a neon layout for the templated web, like a wikipedia, product catalog or vlog.</p>
                     <div class="d-flex gap-3 fs-5 mt-3">
                         <a href="#" class="text-muted"><i class="bi bi-github"></i></a>
                         <a href="#" class="text-muted"><i class="bi bi-linkedin"></i></a>

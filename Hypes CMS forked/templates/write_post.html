@@ -22,7 +22,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container animate__animated animate__fadeIn">
+<div class="container-fluid animate__animated animate__fadeIn">
     <div class="mb-4">
         <a href="{{ url_for('main.my_posts') }}" class="text-indigo text-decoration-none fw-semibold small mb-2 d-inline-block">
             <i class="bi bi-arrow-left me-1"></i>Back to My Posts
@@ -33,7 +33,7 @@
 
     <!-- --- POST FORM --- -->
     <div class="card-premium p-4 p-md-5 shadow-sm mb-5">
-        <form method="POST" action="" enctype="multipart/form-data">
+        <form method="POST" action="" enctype="multipart/form-data" novalidate>
             {{ form.hidden_tag() }}
             
             <div class="row g-4">
@@ -71,7 +71,7 @@
                 </div>
                 
                 <!-- Right Side: Settings & Uploads -->
-                <div class="col-lg-4">
+                <div class="col-lg-4 sidebar">
                     <div class="bg-accent p-4 rounded-4 border border-color h-100 d-flex flex-column justify-content-between">
                         <div>
                             <h5 class="fw-bold text-primary border-bottom border-color pb-2 mb-3"><i class="bi bi-gear me-2"></i>Publish Settings</h5>
